@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Better Prompt</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Better Prompt</h1>
+      <div class="settings-container">
+        <div id="api-notification" class="hidden"></div>
+        <span id="settings-btn" class="material-icons settings-icon" title="Settings">settings</span>
+      </div>
+    </div>
+    
+    <div id="settings-panel" class="settings-panel hidden">
+      <div class="api-key-section">
+        <label for="api-key">Gemini API Key:</label>
+        <div class="input-with-button">
+          <input type="text" id="api-key" placeholder="Enter your Gemini API key">
+          <button id="save-api-key">Save</button>
+        </div>
+        <div class="api-key-info">
+          <a href="https://makersuite.google.com/app/apikey" target="_blank">Get an API key</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="prompt-section">
+      <label for="original-prompt">Your Prompt:</label>
+      <textarea id="original-prompt" placeholder="Enter your prompt here"></textarea>
+      
+      <div class="optimization-options">
+        <div class="options-row">
+          <div class="option-group">
+            <label>Optimization Type:</label>
+            <select id="optimization-type">
+              <option value="improve">Improve Clarity</option>
+              <option value="enhance">Enhance Detail</option>
+              <option value="shorten">Make Concise</option>
+              <option value="professional">Make Professional</option>
+            </select>
+          </div>
+          
+          <div class="option-group">
+            <label>Model:</label>
+            <select id="model-type">
+              <option value="gemini-2.0-flash">Flash (Balanced)</option>
+              <option value="gemini-2.0-flash-lite">Flash Lite (Fastest)</option>
+              <option value="gemini-2.0-pro-exp-02-05">Pro (High Quality)</option>
+              <option value="gemini-2.0-flash-thinking-exp-01-21">Flash Thinking (Detailed)</option>
+              <option value="gemini-2.0-flash-exp">Flash Exp (Experimental)</option>
+            </select>
+          </div>
+        </div>
+        
+        <button id="optimize-btn">Optimize</button>
+      </div>
+      
+      <div class="result-container">
+        <label for="optimized-prompt">Optimized Prompt:</label>
+        <div class="textarea-container">
+          <textarea id="optimized-prompt" readonly></textarea>
+          <div id="copy-btn" class="copy-icon-container" title="Copy to clipboard">
+            <span class="material-icons">content_copy</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="status-message" id="status-message"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

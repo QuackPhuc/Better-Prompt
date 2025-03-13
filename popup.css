@@ -1,0 +1,269 @@
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  width: 400px;
+  padding: 15px;
+  margin: 0;
+  /* Enable GPU acceleration for smoother animations */
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+h1 {
+  font-size: 20px;
+  color: #1a73e8;
+  margin: 0;
+}
+
+.settings-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.settings-icon {
+  color: #5f6368;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.settings-icon:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #1a73e8;
+}
+
+#api-notification {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 8px;
+  height: 8px;
+  background-color: #d93025;
+  border-radius: 50%;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.settings-panel {
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #e0e0e0;
+}
+
+.api-key-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-with-button {
+  display: flex;
+  gap: 8px;
+}
+
+.input-with-button input {
+  flex-grow: 1;
+}
+
+.api-key-info {
+  font-size: 12px;
+}
+
+.api-key-info a {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.api-key-info a:hover {
+  text-decoration: underline;
+}
+
+.prompt-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+}
+
+input, select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+textarea {
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+button {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+button:hover {
+  background-color: #1558b7;
+}
+
+#copy-btn {
+  align-self: flex-end;
+  margin-top: 5px;
+}
+
+.optimization-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.result-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.textarea-container {
+  position: relative;
+}
+
+#optimized-prompt {
+  background-color: #f8f9fa;
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 40px; /* Make room for copy icon */
+}
+
+.copy-icon-container {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s, background-color 0.2s;
+  background-color: transparent;
+}
+
+.copy-icon-container:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.copy-icon-container .material-icons {
+  font-size: 18px;
+  color: #5f6368;
+}
+
+.copy-icon-container:hover .material-icons {
+  color: #1a73e8;
+}
+
+.status-message {
+  color: #1a73e8;
+  font-size: 14px;
+  text-align: center;
+  min-height: 20px;
+  transition: opacity 0.2s ease;
+  will-change: opacity;
+}
+
+.error {
+  color: #d93025;
+}
+
+.options-row {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.option-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+#copy-btn, #insert-btn {
+  align-self: flex-end;
+  margin-top: 5px;
+}
+
+/* Add optimized performance styles */
+textarea, select, input {
+  /* Enable hardware acceleration for smoother scrolling */
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Add a loading indicator */
+.loading::after {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s ease-in-out infinite;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
