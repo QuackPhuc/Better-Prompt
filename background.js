@@ -45,12 +45,6 @@ async function optimizePrompt(data) {
     case 'enhance':
       systemPrompt += "Thoroughly analyze and enhance the following user prompt to create a highly effective improved prompt. Your enhanced output should include: 1) Analysis of the topic and user intent from the original prompt, 2) Detailed system instructions formatted as clear directives to guide AI responses, 3) Identification and inclusion of necessary contextual information about the topic that was missing from the original prompt, 4) Additional clarifications or constraints that would improve results. Structure your response as a comprehensive prompt that can be used immediately by the user to get superior results from AI systems. Make sure the enhanced prompt maintains the original intent but adds depth, clarity, and technical precision and ensure it adheres to best practices for AI interaction.";
       break;
-    case 'shorten':
-      systemPrompt += "Please rewrite the following prompt to make it more concise while ensuring the core intent and essential details are preserved. Focus on clarity and brevity, removing any redundant or unnecessary information. Maintain the original prompt's context and domain. Ensure it follows AI interaction best practices";
-      break;
-    case 'professional':
-      systemPrompt += "Please rewrite the following prompt to enhance its professionalism and structure, making it suitable for business or formal contexts. Ensure the tone is respectful and the language is clear and concise. The rewritten prompt should be presented in a format that can be directly used in professional communications.";
-      break;
     default:
       systemPrompt += "Analyze and enhance the following user prompt to improve its clarity and effectiveness for AI interaction.";
   }
