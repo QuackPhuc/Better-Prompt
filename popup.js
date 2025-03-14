@@ -8,9 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const optimizeBtn = document.getElementById('optimize-btn');
   const optimizedPromptOutput = document.getElementById('optimized-prompt');
   const copyBtn = document.getElementById('copy-btn');
+  const saveBtn = document.getElementById('save-btn');
   const statusMessage = document.getElementById('status-message');
   const settingsBtn = document.getElementById('settings-btn');
   const settingsPanel = document.getElementById('settings-panel');
+  const historyBtn = document.getElementById('history-btn');
+  const historyPanel = document.getElementById('history-panel');
+  const historyList = document.getElementById('history-list');
+  const clearHistoryBtn = document.getElementById('clear-history');
+  const historyEmpty = document.getElementById('history-empty');
   const apiNotification = document.getElementById('api-notification');
   
   // For performance optimization, cache DOM queries
@@ -23,9 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
     optimizeBtn,
     optimizedPromptOutput,
     copyBtn,
+    saveBtn,
     statusMessage,
     settingsBtn,
     settingsPanel,
+    historyBtn,
+    historyPanel,
+    historyList,
+    clearHistoryBtn,
+    historyEmpty,
     apiNotification
   };
   
@@ -34,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
     optimizationType: 'improve',
     modelType: 'gemini-2.0-flash'
   };
+  
+  // Store history items
+  let promptHistory = [];
   
   // Simple obfuscation functions for API key
   function obfuscateApiKey(apiKey) {
@@ -64,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   // Load saved data using a single storage call for better performance
-  chrome.storage.local.get(['geminiApiKey', 'preferences'], (data) => {
+  chrome.storage.local.get(['geminiApiKey', 'preferences', 'promptHistory'], (data) => {
     if (data.geminiApiKey) {
       elements.apiKeyInput.value = deobfuscateApiKey(data.geminiApiKey);
       hideApiKeyNotification();
@@ -77,11 +92,30 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.optimizationTypeSelect.value = preferences.optimizationType;
       elements.modelTypeSelect.value = preferences.modelType;
     }
+    
+    // Load prompt history
+    if (data.promptHistory && Array.isArray(data.promptHistory)) {
+      promptHistory = data.promptHistory;
+      renderHistoryList();
+    }
   });
   
   // Settings panel toggle
   settingsBtn.addEventListener('click', () => {
     settingsPanel.classList.toggle('hidden');
+    // Hide history panel when settings panel is shown
+    if (!settingsPanel.classList.contains('hidden')) {
+      historyPanel.classList.add('hidden');
+    }
+  });
+  
+  // History panel toggle
+  historyBtn.addEventListener('click', () => {
+    historyPanel.classList.toggle('hidden');
+    // Hide settings panel when history panel is shown
+    if (!historyPanel.classList.contains('hidden')) {
+      settingsPanel.classList.add('hidden');
+    }
   });
   
   // Save API key with warning
@@ -102,6 +136,130 @@ document.addEventListener('DOMContentLoaded', () => {
       showApiKeyNotification();
     }
   });
+  
+  // Clear history button
+  clearHistoryBtn.addEventListener('click', () => {
+    if (promptHistory.length === 0) return;
+    
+    const confirmClear = confirm('This will clear all unpinned prompts from your history. Continue?');
+    if (confirmClear) {
+      // Keep only pinned items
+      promptHistory = promptHistory.filter(item => item.pinned);
+      saveHistory();
+      renderHistoryList();
+      showStatus('Unpinned prompts cleared!');
+    }
+  });
+  
+  // Save prompt to history with visual feedback
+  saveBtn.addEventListener('click', () => {
+    const optimizedPrompt = elements.optimizedPromptOutput.value.trim();
+    if (optimizedPrompt) {
+      // Visual feedback on save
+      const icon = saveBtn.querySelector('.material-icons');
+      icon.textContent = 'bookmark';
+      setTimeout(() => {
+        icon.textContent = 'bookmark_border';
+      }, 1500);
+      
+      addToHistory(optimizedPrompt);
+      showStatus('Prompt saved to history!');
+    } else {
+      showStatus('No prompt to save', true);
+    }
+  });
+  
+  // Add to history
+  function addToHistory(prompt) {
+    // Create a new history item
+    const historyItem = {
+      id: Date.now().toString(),
+      prompt: prompt,
+      pinned: false,
+      date: new Date().toISOString()
+    };
+    
+    // Add to the beginning of the array (newest first)
+    promptHistory.unshift(historyItem);
+    
+    // Limit history to 50 items
+    if (promptHistory.length > 50) {
+      promptHistory.pop();
+    }
+    
+    // Save to storage and update UI
+    saveHistory();
+    renderHistoryList();
+  }
+  
+  // Remove from history
+  function removeFromHistory(id) {
+    promptHistory = promptHistory.filter(item => item.id !== id);
+    saveHistory();
+    renderHistoryList();
+  }
+  
+  // Toggle pin status with visual feedback
+  function togglePinStatus(id) {
+    const item = promptHistory.find(item => item.id === id);
+    if (item) {
+      item.pinned = !item.pinned;
+      saveHistory();
+      renderHistoryList();
+      showStatus(item.pinned ? 'Prompt pinned!' : 'Prompt unpinned!');
+    }
+  }
+  
+  // Save history to storage
+  function saveHistory() {
+    chrome.storage.local.set({ promptHistory });
+  }
+  
+  // Render history list
+  function renderHistoryList() {
+    elements.historyList.innerHTML = '';
+    
+    if (promptHistory.length === 0) {
+      elements.historyEmpty.classList.remove('hidden');
+      return;
+    }
+    
+    elements.historyEmpty.classList.add('hidden');
+    
+    // Create element for each history item
+    promptHistory.forEach(item => {
+      const historyItem = document.createElement('div');
+      historyItem.className = `history-item ${item.pinned ? 'pinned' : ''}`;
+      
+      // Format the content with improved UI
+      historyItem.innerHTML = `
+        <div class="history-item-content">${item.prompt}</div>
+        <div class="history-pin" title="${item.pinned ? 'Unpin' : 'Pin'} this prompt">
+          <span class="material-icons history-icon">${item.pinned ? 'push_pin' : 'push_pin'}</span>
+        </div>
+        <div class="history-item-actions">
+          <span class="material-icons history-icon" title="Use this prompt">call_made</span>
+          <span class="material-icons history-icon" title="Delete">delete_outline</span>
+        </div>
+      `;
+      
+      // Add event listeners
+      const pinBtn = historyItem.querySelector('.history-pin');
+      const useBtn = historyItem.querySelector('.history-item-actions span:first-child');
+      const deleteBtn = historyItem.querySelector('.history-item-actions span:last-child');
+      
+      pinBtn.addEventListener('click', () => togglePinStatus(item.id));
+      
+      useBtn.addEventListener('click', () => {
+        elements.optimizedPromptOutput.value = item.prompt;
+        historyPanel.classList.add('hidden');
+      });
+      
+      deleteBtn.addEventListener('click', () => removeFromHistory(item.id));
+      
+      elements.historyList.appendChild(historyItem);
+    });
+  }
   
   // Show notification that API key is missing
   function showApiKeyNotification() {
@@ -177,6 +335,10 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             elements.optimizedPromptOutput.value = response.result;
             showStatus('Prompt optimized successfully!');
+            
+            // Auto-save to history if option is enabled
+            // For now, we'll leave this commented out as it's not part of the requirement
+            // addToHistory(response.result);
           }
         });
       }, 10); // Small timeout for UI updates

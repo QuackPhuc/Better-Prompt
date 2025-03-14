@@ -11,6 +11,7 @@
       <h1>Better Prompt</h1>
       <div class="settings-container">
         <div id="api-notification" class="hidden"></div>
+        <span id="history-btn" class="material-icons settings-icon" title="History">history</span>
         <span id="settings-btn" class="material-icons settings-icon" title="Settings">settings</span>
       </div>
     </div>
@@ -25,6 +26,21 @@
         <div class="api-key-info">
           <a href="https://makersuite.google.com/app/apikey" target="_blank">Get an API key</a>
         </div>
+      </div>
+    </div>
+    
+    <div id="history-panel" class="history-panel hidden">
+      <div class="history-header">
+        <h2>Prompt History</h2>
+        <button id="clear-history" class="secondary-btn" title="Clear unpinned prompts">
+          <span class="material-icons">delete_sweep</span> Clear
+        </button>
+      </div>
+      <div id="history-list" class="history-list">
+        <!-- History items will be added here dynamically -->
+      </div>
+      <div class="history-empty hidden" id="history-empty">
+        <p>No saved prompts yet</p>
       </div>
     </div>
     
@@ -58,8 +74,13 @@
         <label for="optimized-prompt">Optimized Prompt:</label>
         <div class="textarea-container">
           <textarea id="optimized-prompt" readonly></textarea>
-          <div id="copy-btn" class="copy-icon-container" title="Copy to clipboard">
-            <span class="material-icons">content_copy</span>
+          <div class="action-buttons">
+            <div id="save-btn" class="copy-icon-container" title="Save to history">
+              <span class="material-icons">bookmark_border</span>
+            </div>
+            <div id="copy-btn" class="copy-icon-container" title="Copy to clipboard">
+              <span class="material-icons">content_copy</span>
+            </div>
           </div>
         </div>
       </div>

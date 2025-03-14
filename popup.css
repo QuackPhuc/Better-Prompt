@@ -32,6 +32,7 @@ h1 {
   display: flex;
   align-items: center;
   position: relative;
+  gap: 8px;
 }
 
 .settings-icon {
@@ -67,6 +68,118 @@ h1 {
   padding: 15px;
   margin-bottom: 15px;
   border: 1px solid #e0e0e0;
+}
+
+/* History panel styles */
+.history-panel {
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #e0e0e0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.history-header h2 {
+  font-size: 16px;
+  margin: 0;
+  color: #202124;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-item {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 10px;
+  position: relative;
+}
+
+.history-item-content {
+  font-size: 13px;
+  line-height: 1.4;
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 5px;
+  padding-right: 20px;
+}
+
+.history-item-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.history-icon {
+  color: #5f6368;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 16px;
+  border-radius: 50%;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.history-icon:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #1a73e8;
+}
+
+.history-pin {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+/* Updated pin styles for better UI feedback */
+.history-pin .material-icons {
+  color: #5f6368; /* Default gray color when not pinned */
+  transition: color 0.2s ease;
+}
+
+.pinned .history-pin .material-icons {
+  color: #1a73e8; /* Blue color when pinned */
+  font-weight: 600;
+}
+
+.history-empty {
+  text-align: center;
+  color: #5f6368;
+  padding: 20px 0;
+}
+
+.secondary-btn {
+  background-color: #f1f3f4;
+  color: #202124;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.secondary-btn:hover {
+  background-color: #e8eaed;
+}
+
+.secondary-btn .material-icons {
+  font-size: 16px;
 }
 
 .api-key-section {
@@ -168,13 +281,20 @@ button:hover {
   background-color: #f8f9fa;
   width: 100%;
   box-sizing: border-box;
-  padding-right: 40px; /* Make room for copy icon */
+  padding-right: 80px; /* Make room for two buttons */
 }
 
-.copy-icon-container {
+/* Improved action buttons styling */
+.action-buttons {
   position: absolute;
   top: 8px;
   right: 8px;
+  display: flex;
+  align-items: center; /* Ensure vertical alignment */
+  gap: 5px;
+}
+
+.copy-icon-container {
   width: 30px;
   height: 30px;
   border-radius: 4px;
@@ -182,7 +302,7 @@ button:hover {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.8; /* Slightly increased from 0.6 for better visibility */
   transition: opacity 0.2s, background-color 0.2s;
   background-color: transparent;
 }
@@ -195,10 +315,16 @@ button:hover {
 .copy-icon-container .material-icons {
   font-size: 18px;
   color: #5f6368;
+  transition: color 0.2s;
 }
 
 .copy-icon-container:hover .material-icons {
   color: #1a73e8;
+}
+
+/* Remove duplicate style */
+#copy-btn, #insert-btn {
+  margin-top: 0; /* Remove the unnecessary margin */
 }
 
 .status-message {
@@ -266,4 +392,18 @@ textarea, select, input {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* Remove conflicting styles that cause alignment issues */
+#copy-btn, #save-btn {
+  margin: 0;
+  padding: 0;
+  align-self: center;
+}
+
+/* Remove duplicated selector that's causing the issue */
+#copy-btn, #insert-btn {
+  /* Remove these properties as they're conflicting */
+  align-self: auto;
+  margin-top: 0;
 }

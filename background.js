@@ -49,7 +49,7 @@ async function optimizePrompt(data) {
       systemPrompt += "Analyze and enhance the following user prompt to improve its clarity and effectiveness for AI interaction.";
   }
 
-  systemPrompt += " Additionally, detect and return the primary language of the original prompt without translating any specialized or professional terms.";
+  systemPrompt += " The response should be in the primary language of the original prompt. Do not translate specialized terms or commonly used terminology.";
 
   try {
     // Performance optimization: Use AbortController for request timeouts
