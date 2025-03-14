@@ -1,3 +1,45 @@
+/* Define theme variables */
+:root {
+  /* Light theme (default) */
+  --bg-color: #ffffff;
+  --panel-bg-color: #f8f9fa;
+  --text-color: #202124;
+  --secondary-text-color: #5f6368;
+  --border-color: #e0e0e0;
+  --accent-color: #1a73e8;
+  --accent-hover-color: #1558b7;
+  --input-bg-color: #ffffff;
+  --hover-bg-color: rgba(0, 0, 0, 0.05);
+  --history-item-bg: #ffffff;
+  --optimized-prompt-bg: #f8f9fa;
+  --error-color: #d93025;
+  --button-text-color: #ffffff;
+  --secondary-button-bg: #f1f3f4;
+  --secondary-button-color: #202124;
+  --secondary-button-border: #dadce0;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --bg-color: #202124;
+  --panel-bg-color: #292a2d;
+  --text-color: #e8eaed;
+  --secondary-text-color: #9aa0a6;
+  --border-color: #5f6368;
+  --accent-color: #8ab4f8;
+  --accent-hover-color: #aecbfa;
+  --input-bg-color: #303134;
+  --hover-bg-color: rgba(255, 255, 255, 0.1);
+  --history-item-bg: #303134;
+  --optimized-prompt-bg: #303134;
+  --error-color: #f28b82;
+  --button-text-color: #202124;
+  --secondary-button-bg: #3c4043;
+  --secondary-button-color: #e8eaed;
+  --secondary-button-border: #5f6368;
+}
+
+/* Apply theme variables */
 body {
   font-family: 'Segoe UI', Tahoma, sans-serif;
   width: 400px;
@@ -6,6 +48,9 @@ body {
   /* Enable GPU acceleration for smoother animations */
   transform: translateZ(0);
   will-change: transform;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -36,16 +81,16 @@ h1 {
 }
 
 .settings-icon {
-  color: #5f6368;
+  color: var(--secondary-text-color);
   cursor: pointer;
   padding: 4px;
   border-radius: 50%;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .settings-icon:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: #1a73e8;
+  background-color: var(--hover-bg-color);
+  color: var(--accent-color);
 }
 
 #api-notification {
@@ -63,20 +108,20 @@ h1 {
 }
 
 .settings-panel {
-  background-color: #f8f9fa;
+  background-color: var(--panel-bg-color);
   border-radius: 4px;
   padding: 15px;
   margin-bottom: 15px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-color);
 }
 
 /* History panel styles */
 .history-panel {
-  background-color: #f8f9fa;
+  background-color: var(--panel-bg-color);
   border-radius: 4px;
   padding: 15px;
   margin-bottom: 15px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-color);
   max-height: 300px;
   overflow-y: auto;
 }
@@ -101,8 +146,8 @@ h1 {
 }
 
 .history-item {
-  background-color: white;
-  border: 1px solid #e0e0e0;
+  background-color: var(--history-item-bg);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   padding: 10px;
   position: relative;
@@ -125,7 +170,7 @@ h1 {
 }
 
 .history-icon {
-  color: #5f6368;
+  color: var(--secondary-text-color);
   cursor: pointer;
   padding: 4px;
   font-size: 16px;
@@ -134,8 +179,8 @@ h1 {
 }
 
 .history-icon:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: #1a73e8;
+  background-color: var(--hover-bg-color);
+  color: var(--accent-color);
 }
 
 .history-pin {
@@ -146,12 +191,12 @@ h1 {
 
 /* Updated pin styles for better UI feedback */
 .history-pin .material-icons {
-  color: #5f6368; /* Default gray color when not pinned */
+  color: var(--secondary-text-color); /* Default gray color when not pinned */
   transition: color 0.2s ease;
 }
 
 .pinned .history-pin .material-icons {
-  color: #1a73e8; /* Blue color when pinned */
+  color: var(--accent-color); /* Blue color when pinned */
   font-weight: 600;
 }
 
@@ -162,9 +207,9 @@ h1 {
 }
 
 .secondary-btn {
-  background-color: #f1f3f4;
-  color: #202124;
-  border: 1px solid #dadce0;
+  background-color: var(--secondary-button-bg);
+  color: var(--secondary-button-color);
+  border: 1px solid var(--secondary-button-border);
   border-radius: 4px;
   padding: 6px 12px;
   cursor: pointer;
@@ -175,7 +220,7 @@ h1 {
 }
 
 .secondary-btn:hover {
-  background-color: #e8eaed;
+  background-color: var(--hover-bg-color);
 }
 
 .secondary-btn .material-icons {
@@ -202,7 +247,7 @@ h1 {
 }
 
 .api-key-info a {
-  color: #1a73e8;
+  color: var(--accent-color);
   text-decoration: none;
 }
 
@@ -224,24 +269,28 @@ label {
 
 input, select {
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 14px;
+  background-color: var(--input-bg-color);
+  color: var(--text-color);
 }
 
 textarea {
   height: 100px;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   resize: vertical;
   font-family: inherit;
   font-size: 14px;
+  background-color: var(--input-bg-color);
+  color: var(--text-color);
 }
 
 button {
-  background-color: #1a73e8;
-  color: white;
+  background-color: var(--accent-color);
+  color: var(--button-text-color);
   border: none;
   border-radius: 4px;
   padding: 8px 16px;
@@ -253,7 +302,7 @@ button {
 }
 
 button:hover {
-  background-color: #1558b7;
+  background-color: var(--accent-hover-color);
 }
 
 #copy-btn {
@@ -278,7 +327,7 @@ button:hover {
 }
 
 #optimized-prompt {
-  background-color: #f8f9fa;
+  background-color: var(--optimized-prompt-bg);
   width: 100%;
   box-sizing: border-box;
   padding-right: 80px; /* Make room for two buttons */
@@ -309,17 +358,17 @@ button:hover {
 
 .copy-icon-container:hover {
   opacity: 1;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--hover-bg-color);
 }
 
 .copy-icon-container .material-icons {
   font-size: 18px;
-  color: #5f6368;
+  color: var(--secondary-text-color);
   transition: color 0.2s;
 }
 
 .copy-icon-container:hover .material-icons {
-  color: #1a73e8;
+  color: var(--accent-color);
 }
 
 /* Remove duplicate style */
@@ -328,7 +377,7 @@ button:hover {
 }
 
 .status-message {
-  color: #1a73e8;
+  color: var(--accent-color);
   font-size: 14px;
   text-align: center;
   min-height: 20px;
@@ -337,7 +386,7 @@ button:hover {
 }
 
 .error {
-  color: #d93025;
+  color: var(--error-color);
 }
 
 .options-row {
@@ -406,4 +455,11 @@ textarea, select, input {
   /* Remove these properties as they're conflicting */
   align-self: auto;
   margin-top: 0;
+}
+
+/* Add theme section styles */
+.theme-section {
+  margin-top: 15px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 15px;
 }

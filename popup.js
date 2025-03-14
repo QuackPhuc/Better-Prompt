@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const originalPromptInput = document.getElementById('original-prompt');
   const optimizationTypeSelect = document.getElementById('optimization-type');
   const modelTypeSelect = document.getElementById('model-type');
+  const themeSelect = document.getElementById('theme-select');
   const optimizeBtn = document.getElementById('optimize-btn');
   const optimizedPromptOutput = document.getElementById('optimized-prompt');
   const copyBtn = document.getElementById('copy-btn');
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     originalPromptInput,
     optimizationTypeSelect,
     modelTypeSelect,
+    themeSelect,
     optimizeBtn,
     optimizedPromptOutput,
     copyBtn,
@@ -44,11 +46,40 @@ document.addEventListener('DOMContentLoaded', () => {
   // Store the last selected preferences
   let preferences = {
     optimizationType: 'improve',
-    modelType: 'gemini-2.0-flash'
+    modelType: 'gemini-2.0-flash',
+    theme: 'system'
   };
   
   // Store history items
   let promptHistory = [];
+
+  // Theme handling functions
+  function setTheme(theme) {
+    if (theme === 'system') {
+      // Check system preference
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+    
+    // Save preference
+    preferences.theme = theme;
+    savePreferences();
+  }
+  
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (preferences.theme === 'system') {
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    }
+  });
+  
+  // Theme selector change handler
+  themeSelect.addEventListener('change', () => {
+    const selectedTheme = themeSelect.value;
+    setTheme(selectedTheme);
+  });
   
   // Simple obfuscation functions for API key
   function obfuscateApiKey(apiKey) {
@@ -91,6 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
       preferences = {...preferences, ...data.preferences};
       elements.optimizationTypeSelect.value = preferences.optimizationType;
       elements.modelTypeSelect.value = preferences.modelType;
+      elements.themeSelect.value = preferences.theme || 'system';
+      
+      // Apply theme
+      setTheme(preferences.theme || 'system');
+    } else {
+      // Apply default theme (system)
+      setTheme('system');
     }
     
     // Load prompt history
