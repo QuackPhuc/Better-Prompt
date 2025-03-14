@@ -367,7 +367,7 @@ button:hover {
   transition: color 0.2s;
 }
 
-.copy-icon-container:hover .material-icons {
+copy-icon-container:hover .material-icons {
   color: var(--accent-color);
 }
 
@@ -462,4 +462,80 @@ textarea, select, input {
   margin-top: 15px;
   border-top: 1px solid var(--border-color);
   padding-top: 15px;
+}
+
+/* API key security styling - Improved reset button */
+.secure-input-container {
+  position: relative;
+  flex-grow: 1;
+}
+
+#api-key {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: transparent;
+  color: transparent;
+  text-shadow: 0 0 8px var(--text-color);
+  caret-color: var(--text-color); /* Keep cursor visible for UX */
+  padding-right: 40px; /* Increased padding to avoid text overlay with reset button */
+  z-index: 1; /* Ensure input receives focus and events */
+  position: relative;
+}
+
+#api-key::selection {
+  background-color: transparent;
+}
+
+.masked-key {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 14px;
+  padding: 8px;
+  padding-right: 40px; /* Match the input padding */
+  box-sizing: border-box;
+  color: var(--text-color);
+  background-color: var(--input-bg-color);
+  border-radius: 4px;
+  pointer-events: none; /* Allow clicks to pass through to the input */
+  overflow: hidden;
+  white-space: nowrap;
+  border: 1px solid var(--border-color);
+  font-family: monospace;
+  text-overflow: ellipsis; /* Add ellipsis for overflow text */
+  user-select: none; /* Prevent text selection */
+}
+
+.reset-api-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; /* Slightly larger */
+  height: 28px; /* Slightly larger */
+  border-radius: 50%;
+  background-color: var(--hover-bg-color); /* Always show background */
+  transition: background-color 0.2s, color 0.2s;
+  z-index: 2; /* Ensure it's above the masked display and input */
+  border: 1px solid var(--border-color); /* Add border for better visibility */
+}
+
+.reset-api-btn:hover {
+  background-color: var(--accent-color);
+}
+
+.reset-api-btn:hover .material-icons {
+  color: var(--button-text-color);
+}
+
+.reset-api-btn .material-icons {
+  font-size: 16px;
+  color: var(--secondary-text-color);
+  transition: color 0.2s;
 }

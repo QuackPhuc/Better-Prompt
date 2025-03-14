@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Get DOM elements
   const apiKeyInput = document.getElementById('api-key');
+  const maskedKeyDisplay = document.getElementById('masked-key');
+  const resetApiBtn = document.getElementById('reset-api-btn');
   const saveApiKeyBtn = document.getElementById('save-api-key');
   const originalPromptInput = document.getElementById('original-prompt');
   const optimizationTypeSelect = document.getElementById('optimization-type');
@@ -23,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // For performance optimization, cache DOM queries
   const elements = {
     apiKeyInput,
+    maskedKeyDisplay,
+    resetApiBtn,
     saveApiKeyBtn,
     originalPromptInput,
     optimizationTypeSelect,
@@ -112,7 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Load saved data using a single storage call for better performance
   chrome.storage.local.get(['geminiApiKey', 'preferences', 'promptHistory'], (data) => {
     if (data.geminiApiKey) {
-      elements.apiKeyInput.value = deobfuscateApiKey(data.geminiApiKey);
+      const decodedKey = deobfuscateApiKey(data.geminiApiKey);
+      apiKeyInput.value = decodedKey;
+      updateMaskedDisplay(decodedKey);
       hideApiKeyNotification();
     } else {
       showApiKeyNotification();
@@ -167,6 +173,8 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.local.set({ geminiApiKey: obfuscateApiKey(apiKey) }, () => {
           showStatus('API key saved successfully!');
           hideApiKeyNotification();
+          // Make sure masked display is updated
+          updateMaskedDisplay(apiKey);
         });
       }
     } else {
@@ -420,4 +428,58 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.statusMessage.textContent = '';
     }, 3000);
   }
+
+  // Secure API key handling - prevent copying and mask display
+  apiKeyInput.addEventListener('input', () => {
+    const apiKey = apiKeyInput.value.trim();
+    updateMaskedDisplay(apiKey);
+  });
+  
+  // Prevent copying API key
+  apiKeyInput.addEventListener('copy', (e) => {
+    e.preventDefault();
+    showStatus('Copying API key is disabled for security', true);
+  });
+  
+  apiKeyInput.addEventListener('cut', (e) => {
+    e.preventDefault();
+    showStatus('Cutting API key is disabled for security', true);
+  });
+  
+  apiKeyInput.addEventListener('paste', (e) => {
+    // Allow paste operation but update the masked display after a short delay
+    setTimeout(() => updateMaskedDisplay(apiKeyInput.value), 10);
+  });
+  
+  // Update the masked display of the API key
+  function updateMaskedDisplay(apiKey) {
+    if (!apiKey) {
+      maskedKeyDisplay.textContent = '';
+      return;
+    }
+    
+    // Show first 4 and last 4 characters, mask the rest with bullets
+    const maskedKey = maskApiKey(apiKey);
+    maskedKeyDisplay.textContent = maskedKey;
+  }
+  
+  // Create a masked version of the API key using bullet points
+  function maskApiKey(apiKey) {
+    if (apiKey.length <= 8) {
+      // For very short keys, show the first 2 and last 2
+      return apiKey.length <= 4 ? apiKey : 
+        apiKey.substring(0, 2) + '•'.repeat(apiKey.length - 4) + apiKey.slice(-2);
+    }
+    
+    // For longer keys, show first 4 and last 4
+    return apiKey.substring(0, 4) + '•'.repeat(apiKey.length - 8) + apiKey.slice(-4);
+  }
+  
+  // Reset API key field
+  resetApiBtn.addEventListener('click', () => {
+    apiKeyInput.value = '';
+    maskedKeyDisplay.textContent = '';
+    apiKeyInput.focus();
+    showStatus('API key field reset', false);
+  });
 });

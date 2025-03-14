@@ -20,7 +20,13 @@
       <div class="api-key-section">
         <label for="api-key">Gemini API Key:</label>
         <div class="input-with-button">
-          <input type="text" id="api-key" placeholder="Enter your Gemini API key">
+          <div class="secure-input-container">
+            <input type="password" id="api-key" placeholder="Enter your Gemini API key" autocomplete="off" spellcheck="false">
+            <div class="masked-key" id="masked-key"></div>
+            <div class="reset-api-btn" id="reset-api-btn" title="Reset API Key">
+              <span class="material-icons">restart_alt</span>
+            </div>
+          </div>
           <button id="save-api-key">Save</button>
         </div>
         <div class="api-key-info">
